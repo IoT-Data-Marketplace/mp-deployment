@@ -7,12 +7,6 @@ data "helm_repository" "stable" {
   url  = "https://kubernetes-charts.storage.googleapis.com"
 }
 
-data "helm_repository" "strimzi" {
-  name = "strimzi"
-  url  = "https://strimzi.io/charts/"
-}
-
-
 data "helm_repository" "confluentinc" {
   name = "confluentinc"
   url  = "https://confluentinc.github.io/cp-helm-charts/"

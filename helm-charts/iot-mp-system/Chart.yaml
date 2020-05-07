@@ -25,3 +25,30 @@ dependencies:
     alias: kafka-cluster
     version: 0.4.1
     repository: https://confluentinc.github.io/cp-helm-charts/
+    condition: kafka-cluster.enabled
+
+  - name: mp-web-client
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-web-client.enabled
+
+  - name: mp-api-gateway
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-api-gateway.enabled
+
+  - name: mp-kafka-rest-proxy
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-kafka-rest-proxy.enabled
+
+  - name: mp-bc-client
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-bc-client.enabled
+
+
+  - name: mp-entity-manager
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-entity-manager.enabled

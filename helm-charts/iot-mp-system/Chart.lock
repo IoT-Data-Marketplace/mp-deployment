@@ -2,5 +2,20 @@ dependencies:
 - name: cp-helm-charts
   repository: https://confluentinc.github.io/cp-helm-charts/
   version: 0.4.1
-digest: sha256:35ba9d7250a9db1b9b02d6cdc7bf90ed43fc9e940b41843be40910011f19f2dc
-generated: "2020-04-25T21:45:19.595999675+02:00"
+- name: mp-web-client
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
+- name: mp-api-gateway
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
+- name: mp-kafka-rest-proxy
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
+- name: mp-bc-client
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
+- name: mp-entity-manager
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
+digest: sha256:110c150898d554c226210019aa0728bfca34601e174700f1aa3c328158175348
+generated: "2020-05-07T11:17:29.599234817+02:00"

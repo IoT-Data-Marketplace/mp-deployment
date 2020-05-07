@@ -1,2 +1,0 @@
-{{ .Chart.Name }} chart deployed.
-Chart Version: {{ .Chart.Version }}
