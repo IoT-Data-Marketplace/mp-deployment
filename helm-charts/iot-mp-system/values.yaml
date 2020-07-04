@@ -1,0 +1,5 @@
+cp-helm-charts:
+  cp-kafka-rest:
+    replicaCount: 2
+
+baseURL: iot-data-mp.com

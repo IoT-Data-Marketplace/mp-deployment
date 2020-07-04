@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: test-istio-web
+spec:
+  hosts:
+    - "iot-data-mp.com"
+  gateways:
+    - istio-ingress-http-gateway
+  http:
+    - match:
+        - uri:
+            exact: /graphql
+      route:
+        - destination:
+            host: {{ .Values.global.namespaceName }}-mp-api-gateway
+            port:
+              number: 8050
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            port:
+              number: 8040
+            host: {{ .Values.global.namespaceName }}-mp-web-client
