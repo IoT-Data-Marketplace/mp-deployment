@@ -11,4 +11,4 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "{{ .Values.baseURL }}"
+        - "{{ required "A valid .Values.baseURL entry required!" .Values.baseURL }}"

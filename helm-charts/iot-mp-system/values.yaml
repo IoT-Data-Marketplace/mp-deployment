@@ -1,3 +1,7 @@
+global:
+  recreationFlag: 1
+  namespaceName: ""
+
 cp-helm-charts:
   cp-kafka-rest:
     replicaCount: 2

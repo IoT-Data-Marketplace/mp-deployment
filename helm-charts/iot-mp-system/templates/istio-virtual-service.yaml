@@ -4,7 +4,7 @@ metadata:
   name: test-istio-web
 spec:
   hosts:
-    - "iot-data-mp.com"
+    - "{{ required "A valid .Values.baseURL entry required!" .Values.baseURL }}"
   gateways:
     - istio-ingress-http-gateway
   http:
@@ -13,7 +13,7 @@ spec:
             exact: /graphql
       route:
         - destination:
-            host: {{ .Values.global.namespaceName }}-mp-api-gateway
+            host: {{ required "A valid .Values.global.namespaceName entry required!" .Values.global.namespaceName }}-mp-api-gateway
             port:
               number: 8050
     - match:
@@ -23,4 +23,4 @@ spec:
         - destination:
             port:
               number: 8040
-            host: {{ .Values.global.namespaceName }}-mp-web-client
+            host: {{ required "A valid .Values.global.namespaceName entry required!" .Values.global.namespaceName }}-mp-web-client
