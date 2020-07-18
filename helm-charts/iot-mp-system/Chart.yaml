@@ -47,6 +47,10 @@ dependencies:
     repository: "@iot-data-mp-charts"
     condition: mp-bc-client.enabled
 
+  - name: mp-signature-verifier
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-signature-verifier.enabled
 
   - name: mp-entity-manager
     version: 0.1.0

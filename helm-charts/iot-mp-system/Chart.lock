@@ -14,8 +14,11 @@ dependencies:
 - name: mp-bc-client
   repository: https://chartmuseum.iot-data-mp.com
   version: 0.1.0
+- name: mp-signature-verifier
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
 - name: mp-entity-manager
   repository: https://chartmuseum.iot-data-mp.com
   version: 0.1.0
-digest: sha256:7df779b168e51272f1f3795e9b7a37f0f9932f44b1b9842e6ecda45caf8f224f
-generated: "2020-07-05T10:52:03.317415797+02:00"
+digest: sha256:c5092bbd681f7b3f4e30822e0ddd0218940882f375469926a4da6afa77730048
+generated: "2020-07-18T22:44:16.600708264+02:00"

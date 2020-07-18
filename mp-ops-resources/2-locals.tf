@@ -7,7 +7,8 @@ locals {
     "mp-kafka-rest-proxy",
     "mp-api-gateway",
     "mp-entity-manager",
-    "mp-bc-client"
+    "mp-bc-client",
+    "mp-signature-verifier"
   ]
 
 }
