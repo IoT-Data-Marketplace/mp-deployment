@@ -1,4 +1,4 @@
 /.idea/
 *.tfvars
 *.terraform
-/helm-charts/values.yaml
+/helm-charts/mp-system/values.yaml

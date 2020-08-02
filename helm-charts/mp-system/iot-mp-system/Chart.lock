@@ -8,10 +8,13 @@ dependencies:
 - name: mp-api-gateway
   repository: https://chartmuseum.iot-data-mp.com
   version: 0.1.0
-- name: mp-kafka-rest-proxy
+- name: mp-stream-api
   repository: https://chartmuseum.iot-data-mp.com
   version: 0.1.0
 - name: mp-bc-client
+  repository: https://chartmuseum.iot-data-mp.com
+  version: 0.1.0
+- name: mp-eth-node
   repository: https://chartmuseum.iot-data-mp.com
   version: 0.1.0
 - name: mp-signature-verifier
@@ -20,5 +23,5 @@ dependencies:
 - name: mp-entity-manager
   repository: https://chartmuseum.iot-data-mp.com
   version: 0.1.0
-digest: sha256:c5092bbd681f7b3f4e30822e0ddd0218940882f375469926a4da6afa77730048
-generated: "2020-07-18T22:44:16.600708264+02:00"
+digest: sha256:f453be3eb103ede93c6b86e89f62816f71024a930d17ce32720025338611b5d1
+generated: "2020-08-01T23:29:28.90000389+02:00"

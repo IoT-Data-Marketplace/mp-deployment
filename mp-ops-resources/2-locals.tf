@@ -4,7 +4,7 @@ locals {
 
   repositories = [
     "mp-web-client",
-    "mp-kafka-rest-proxy",
+    "mp-stream-api",
     "mp-api-gateway",
     "mp-entity-manager",
     "mp-bc-client",

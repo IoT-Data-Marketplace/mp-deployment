@@ -37,12 +37,17 @@ dependencies:
     repository: "@iot-data-mp-charts"
     condition: mp-api-gateway.enabled
 
-  - name: mp-kafka-rest-proxy
+  - name: mp-stream-api
     version: 0.1.0
     repository: "@iot-data-mp-charts"
-    condition: mp-kafka-rest-proxy.enabled
+    condition: mp-stream-api.enabled
 
   - name: mp-bc-client
+    version: 0.1.0
+    repository: "@iot-data-mp-charts"
+    condition: mp-bc-client.enabled
+
+  - name: mp-eth-node
     version: 0.1.0
     repository: "@iot-data-mp-charts"
     condition: mp-bc-client.enabled

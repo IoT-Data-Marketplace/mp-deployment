@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: ethereum/client-go
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+#####################################################################################
+################## USER SUPPLIED VALUES IN MAIN VALUES.YAML #########################
+#####################################################################################
+
+recreationFlag: 1
+
+global:
+  namespaceName: ""
+  recreationFlag: 1
+  mpETHNodePort: 8545
+  mpETHNodePortName: http-8545
+  mpETHNodeRPCPort: 30303
+  mpETHNodeRPCPortName: http-30303
+service:
+  type: ClusterIP
+
+resources: {}
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+#  limits:
+#    cpu: 1000m
+#    memory: 1024Mi
+
+
+#####################################################################################
+################## USER SUPPLIED VALUES IN MAIN VALUES.YAML #########################
+#####################################################################################
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

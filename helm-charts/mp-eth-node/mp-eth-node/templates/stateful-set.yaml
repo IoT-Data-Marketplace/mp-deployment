@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "mp-eth-node.fullname" . }}
+  labels:
+    {{- include "mp-eth-node.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "mp-eth-node.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "mp-eth-node.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "mp-eth-node.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          args:
+            - --rinkeby
+            - --syncmode
+            - "light"
+            - --http
+            - --http.addr
+            - 0.0.0.0
+            - --http.corsdomain
+            - "*"
+            - --rpcvhosts
+            - "*"
+
+          ports:
+            - name: {{ required "A valid .Values.global.mpETHNodePortName entry required!" .Values.global.mpETHNodePortName }}
+              containerPort: {{ required "A valid .Values.global.mpETHNodePort entry required!" .Values.global.mpETHNodePort }}
+              protocol: TCP
+            - name: {{ required "A valid .Values.global.mpETHNodeRPCPortName entry required!" .Values.global.mpETHNodeRPCPortName }}
+              containerPort: {{ required "A valid .Values.global.mpETHNodeRPCPort entry required!" .Values.global.mpETHNodeRPCPort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /root
+              name: {{ include "mp-eth-node.fullname" . }}-datadir-voluma
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "mp-eth-node.fullname" . }}-datadir-voluma
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "gp2"
+        resources:
+          requests:
+            storage: 20Gi
