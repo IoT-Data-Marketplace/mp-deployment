@@ -1,9 +1,364 @@
+baseURL: iot-data-mp.com
+
 global:
   recreationFlag: 1
-  namespaceName: ""
+  namespaceName: iot-mp-system
 
-cp-helm-charts:
+mp-web-client:
+  replicaCount: 1
+  enabled: true
+  recreationFlag: 1
+  graphQlEndpoint: https://iot-data-mp.com/graphql
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - iot-app
+
+mp-api-gateway:
+  enabled: true
+  recreationFlag: 3
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - iot-app
+  #              - key: beta.kubernetes.io/instance-type
+  #                operator: In
+  #                values:
+  #                  - m5.large
+  #                  - m5.xlarge
+  #                  - t3.medium
+  #                  - t3.large
+  #                  - c5n.large
+  #                  - c5n.xlarge
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageCPUUtilization: 60
+    targetAverageMemoryUtilization: 60
+
+  resources:
+    requests:
+      cpu: 800m
+      memory: 768Mi
+    limits:
+      cpu: 1200m
+      memory: 768Mi
+
+mp-stream-api:
+  enabled: true
+  recreationFlag: 1
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - iot-app
+  #              - key: beta.kubernetes.io/instance-type
+  #                operator: In
+  #                values:
+  #                  - m5.large
+  #                  - m5.xlarge
+  #                  - t3.medium
+  #                  - t3.large
+  #                  - c5n.large
+  #                  - c5n.xlarge
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageCPUUtilization: 60
+    targetAverageMemoryUtilization: 60
+
+  resources:
+    requests:
+      cpu: 800m
+      memory: 768Mi
+    limits:
+      cpu: 1200m
+      memory: 768Mi
+
+mp-entity-manager:
+  enabled: true
+  recreationFlag: 1
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - iot-app
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageCPUUtilization: 70
+    targetAverageMemoryUtilization: 70
+
+  resources:
+    requests:
+      cpu: 300m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
+
+mp-eth-node:
+  replicaCount: 1
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - eth-node
+
+mp-bc-client:
+  enabled: true
+  recreationFlag: 1
+  loggingLevel: info
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - iot-app
+              - key: iot-service
+                operator: In
+                values:
+                  - bc-client
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageCPUUtilization: 70
+    targetAverageMemoryUtilization: 70
+
+  resources:
+    requests:
+      cpu: 300m
+      memory: 512Mi
+    limits:
+      cpu: 800m
+      memory: 768Mi
+
+mp-signature-verifier:
+  enabled: true
+  recreationFlag: 1
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                  - iot-app
+
+kafka-cluster:
+  enabled: true
+  ## ------------------------------------------------------
+  ## Zookeeper
+  ## ------------------------------------------------------
+  cp-zookeeper:
+    enabled: true
+    servers: 3
+    image: confluentinc/cp-zookeeper
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms512M -Xmx512M"
+    persistence:
+      enabled: true
+      ## The size of the PersistentVolume to allocate to each Zookeeper Pod in the StatefulSet. For
+      ## production servers this number should likely be much larger.
+      ##
+      ## Size for Data dir, where ZooKeeper will store the in-memory database snapshots.
+      dataDirSize: 64Gi
+      # dataDirStorageClass: ""
+
+      ## Size for data log dir, which is a dedicated log device to be used, and helps avoid competition between logging and snaphots.
+      dataLogDirSize: 64Gi
+      # dataLogDirStorageClass: ""
+
+
+    configurationOverrides:
+      "offsets.topic.replication.factor": 3
+      "default.replication.factor": 1
+      "log.retention.hours": 900
+      "min.insync.replicas": 1
+      "auto.create.topics.enable": true
+
+    resources: {}
+    ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+    ## and remove the curly braces after 'resources:'
+    #  limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    #  requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+    nodeSelector:
+      nodegroup: kafka-cluster
+
+  ## ------------------------------------------------------
+  ## Kafka
+  ## ------------------------------------------------------
+  cp-kafka:
+    enabled: true
+    brokers: 3
+    image: confluentinc/cp-enterprise-kafka
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms2048M -Xmx2048M"
+    persistence:
+      enabled: true
+      # storageClass: ""
+      size: 64Gi
+      disksPerBroker: 1
+    resources:
+      ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+      ## and remove the curly braces after 'resources:'
+      limits:
+        cpu: 1500m
+        memory: 5000Mi
+      requests:
+        cpu: 1500m
+        memory: 5000Mi
+    nodeSelector:
+      nodegroup: kafka-cluster
+  ## ------------------------------------------------------
+  ## Schema Registry
+  ## ------------------------------------------------------
+  cp-schema-registry:
+    enabled: false
+    image: confluentinc/cp-schema-registry
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms512M -Xmx512M"
+    resources: {}
+    ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+    ## and remove the curly braces after 'resources:'
+    #  limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    #  requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+    nodeSelector:
+      nodegroup: kafka-addons
+  ## ------------------------------------------------------
+  ## REST Proxy
+  ## ------------------------------------------------------
   cp-kafka-rest:
-    replicaCount: 2
-
-baseURL: iot-data-mp.com
+    enabled: true
+    replicaCount: 1
+    image: confluentinc/cp-kafka-rest
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms4096M -Xmx4096M"
+    resources:
+      ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+      ## and remove the curly braces after 'resources:'
+      limits:
+        cpu: 3000m
+        memory: 8000Mi
+      requests:
+        cpu: 3000m
+        memory: 8000Mi
+    nodeSelector:
+      nodegroup: kafka-addons
+  ## ------------------------------------------------------
+  ## Kafka Connect
+  ## ------------------------------------------------------
+  cp-kafka-connect:
+    enabled: false
+    image: confluentinc/cp-kafka-connect
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms512M -Xmx512M"
+    resources: {}
+    ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+    ## and remove the curly braces after 'resources:'
+    #  limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    #  requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+    nodeSelector:
+      nodegroup: kafka-addons
+  ## ------------------------------------------------------
+  ## KSQL Server
+  ## ------------------------------------------------------
+  cp-ksql-server:
+    enabled: false
+    image: confluentinc/cp-ksqldb-server
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms512M -Xmx512M"
+    ksql:
+      headless: false
+    nodeSelector:
+      nodegroup: kafka-addons
+  ## ------------------------------------------------------
+  ## Control Center
+  ## ------------------------------------------------------
+  cp-control-center:
+    enabled: true
+    image: confluentinc/cp-enterprise-control-center
+    imageTag: 5.5.0
+    ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+    ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+    imagePullSecrets:
+    #  - name: "regcred"
+    heapOptions: "-Xms512M -Xmx512M"
+    resources: {}
+    ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+    ## and remove the curly braces after 'resources:'
+    #  limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    #  requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+    nodeSelector:
+      nodegroup: kafka-addons

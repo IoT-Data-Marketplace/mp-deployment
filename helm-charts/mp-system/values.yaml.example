@@ -1,0 +1,14 @@
+mp-web-client:
+  reactAppIoTDataMarketplaceContractAddress: ""
+  graphQlEndpoint: ""
+
+mp-stream-api:
+  kafkaClusterId: ""
+
+mp-entity-manager:
+  databaseURL: ""
+  databaseUsername: mp_user
+  databasePassword: ""
+
+mp-bc-client:
+  ethereumAccountPrivateKey: ""
